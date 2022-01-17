@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/style.css">
+    <title>Quick Tip</title>
+</head>
+<body>
+    <main id="container">
+
+        <h1>Quick Tip</h1>
+
+        <section>
+
+            <div class="bill">
+                <label for="yourBill">Bill</label>
+                <input type="number" placeholder="Your Bill" id="yourBill" min="0">
+            </div>
+
+            <div>
+
+                <div class="space-between">
+                    <label for="tipInput">Select Tip</label>
+                    <span id="tipPercent"></span>
+                </div>
+
+                <input type="range" name="Select Tip" id="tipInput" value="0" class="range">
+
+            </div>
+
+            <div class="space-between">
+                <span>Tip</span>
+                <span id="tipValue"></span>
+            </div>
+
+            <hr>
+
+            <div class="space-between total">
+                <span>Total</span>
+                <span id="totalWithTip"></span>
+            </div>
+
+        </section>
+
+        <section>
+            
+            <div>
+
+                <div class="space-between">
+                    <label for="splitInput">Split</label>
+                    <span id="splitValue"></span>
+                </div>
+
+                <input type="range" min="1" max="10" value="1" id="splitInput" class="range">
+
+            </div>
+
+            <div class="space-between">
+                <span>Bill Each</span>
+                <span id="billEach"></span>
+            </div>
+
+            <div class="space-between">
+                <span>Tip each</span>
+                <span id="tipEach"></span>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        /*Function to format the money*/
+
+        function formatMoney(value){
+            value = Math.ceil(value*100)/100;
+            value = value.toFixed(2);
+            return "&#8377; " + value;
+        }
+        /*function to format the person or people*/
+
+        function formatSplit(value){
+            if( value==="1" ){
+                return value + " Person";
+            }
+            return value + " People";
+            
+        }
+        
+        /* Created a 'update' function when each time we clicked on input & range
+        fields value gets read in the console - here update() is the function.*/
+
+        function update(){
+
+            // console.log('function called');
+            let bill = Number(document.getElementById("yourBill").value);
+            let tipPercent = document.getElementById("tipInput").value;
+            let split = document.getElementById("splitInput").value;
+            //console.log({bill,tipPercent,split});
+
+            let tipValue = bill * (tipPercent/100);
+            let tipEach = tipValue / split;
+            let newBillEach = (bill + tipValue) / split;
+            
+            console.log(newBillEach);
+
+            /* now we will use all these values to calculate tip 
+            and then display them in the user interface */
+
+            document.getElementById('tipPercent').innerHTML = tipPercent + "%";
+            document.getElementById('tipValue').innerHTML = formatMoney(tipValue);
+            document.getElementById('totalWithTip').innerHTML = formatMoney(bill + tipValue);
+            document.getElementById('splitValue').innerHTML = formatSplit(split);
+            document.getElementById('billEach').innerHTML = formatMoney(newBillEach);
+            document.getElementById('tipEach').innerHTML = formatMoney(tipEach);
+        }
+
+        /* added a event listener to get the updates of the clicked fields.
+        insted of oninput / onclicked in html....without disturbing the html tags ,
+        here we created a variable container and assigned it to a id named container ,
+        and later we added javascript function 'addEventListener' means that
+        a function is called when an event is happened ,  to the all input fields
+        with the update function....works same as the onclick/oninput functions.*/
+
+        let container = document.getElementById("container");
+        container.addEventListener("input",update);
+
+    </script>
+
+</body>
+</html>
